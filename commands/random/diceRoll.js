@@ -48,12 +48,9 @@ class DiceRollCommand extends Command {
       if(count[i] === 0) {
         continue;
       }
-      
       text = text.concat(`__|      **${parseInt(i, 10) + 1}**       |            ${count[i]}          |__\n`); // i is registered as a number but treated as string so parseInt is required for some reason
     }
-
     message.reply(text);
-
   };
 };
 
