@@ -19,7 +19,6 @@ class SayCommand extends Command {
       ]
     });
   }
-
   run(message, { text }) {
     message.delete();
     return message.say(text);

@@ -22,7 +22,6 @@ class DiceRollCommand extends Command {
       }
     ]
     });
-
   };
 
   run(message, { timesToRoll, showEachRoll }) {
@@ -32,23 +31,19 @@ class DiceRollCommand extends Command {
       message.reply(`You've specified to show each roll and to roll ${timesToRoll} times. For performance sakes, we will not be showing each indivudal roll.`);
       showEachRoll = false;
     }
-    
     while (i < timesToRoll) {
       i++;
       const roll = Math.floor(Math.random() * 6) + 1;
       count[roll - 1]++;
-
-      if(showEachRoll) {
+      if (showEachRoll) {
         message.reply(`rolled a six sided die and got a ${roll}`);
       }
     }
     
-    let text = 'here is a summary of your rolls:\n|__Number|Times Rolled__|\n';
+    let text = `here is a summary of your ${timesToRoll} rolls:\n|__\tNumber\t|\tTimes Rolled\t|\tProbability\t|__\n`;
     for (i in count) {
-      if(count[i] === 0) {
-        continue;
-      }
-      text = text.concat(`__|      **${parseInt(i, 10) + 1}**       |            ${count[i]}          |__\n`); // i is registered as a number but treated as string so parseInt is required for some reason
+      if (count[i] === 0) continue;
+      text = text.concat(`__|\t\t  **${parseInt(i, 10) + 1}**  \t\t|\t\t\t  ${count[i]}  \t\t\t|\t\t\t${count[i] * 100 / timesToRoll}%\t\t|__\n`); // i is registered as a number but treated as string so parseInt is required for some reason
     }
     message.reply(text);
   };

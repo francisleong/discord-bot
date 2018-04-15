@@ -22,7 +22,6 @@ module.exports = class DmCommand extends Command {
         }]
     });
   }
-
   run(msg, { user, content }) {
     msg.delete();
     return user.send(`This DM was sent from ${msg.author}\n${content}`);

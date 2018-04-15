@@ -10,7 +10,6 @@ class ReplyCommand extends Command {
       examples: ['reply']
     });
   }
-
   run(message) {
     return message.say(`Hi ${message.author}, I am awake!`);
   }
