@@ -1,7 +1,10 @@
 require('./config/config');
+// require('./utility/cleanPokemonData');
 
 const { CommandoClient } = require('discord.js-commando');
 const path = require('path');
+
+const { mongoose } = require('./db/mongoose');
 
 const client = new CommandoClient({
   commandPrefix: '!',
@@ -13,7 +16,8 @@ client.registry
   .registerDefaultTypes()
   .registerGroups([
     ['chat', 'Basic chat commands'],
-    ['random', 'Random generator commands']
+    ['random', 'Random generator commands'],
+    ['pokemon', 'Pokemon related commands']
   ])
   .registerDefaultGroups()
   .registerDefaultCommands()

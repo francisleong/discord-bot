@@ -1,6 +1,6 @@
 const { Command } = require('discord.js-commando');
 
-module.exports = class DmCommand extends Command {
+class DmCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'dm',
@@ -27,3 +27,5 @@ module.exports = class DmCommand extends Command {
     return user.send(`This DM was sent from ${msg.author}\n${content}`);
   }
 };
+
+module.exports = DmCommand;

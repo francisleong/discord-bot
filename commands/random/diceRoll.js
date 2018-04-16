@@ -7,7 +7,7 @@ class DiceRollCommand extends Command {
       group: 'random',
       memberName: 'roll',
       description: 'Rolls a six sided die a specified number of times',
-      examples: ['!roll', '!roll 3'],
+      examples: ['!roll', '!roll 3', '!roll 10 true'],
       args: [{
         key: 'timesToRoll',
         prompt: 'How many dice would you like to roll?',
@@ -27,7 +27,7 @@ class DiceRollCommand extends Command {
   run(message, { timesToRoll, showEachRoll }) {
     let i = 0;
     let count = new Array(6).fill(0);
-    if (timesToRoll > 10 && showEachRoll == true) {
+    if (timesToRoll > 4 && showEachRoll == true) {
       message.reply(`You've specified to show each roll and to roll ${timesToRoll} times. For performance sakes, we will not be showing each indivudal roll.`);
       showEachRoll = false;
     }
@@ -43,7 +43,7 @@ class DiceRollCommand extends Command {
     let text = `here is a summary of your ${timesToRoll} rolls:\n|__\tNumber\t|\tTimes Rolled\t|\tProbability\t|__\n`;
     for (i in count) {
       if (count[i] === 0) continue;
-      text = text.concat(`__|\t\t  **${parseInt(i, 10) + 1}**  \t\t|\t\t\t  ${count[i]}  \t\t\t|\t\t\t${count[i] * 100 / timesToRoll}%\t\t|__\n`); // i is registered as a number but treated as string so parseInt is required for some reason
+      text = text.concat(`__|\t\t  **${parseInt(i, 10) + 1}**  \t\t|\t\t\t  ${count[i]}  \t\t\t|\t\t  ${count[i] * 100 / timesToRoll}%  \t\t|__\n`); // i is registered as a number but treated as string so parseInt is required for some reason
     }
     message.reply(text);
   };
