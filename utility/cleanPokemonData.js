@@ -12,9 +12,9 @@ MongoClient.connect('mongodb://localhost:27017/Pokemon', (err, client) => {
   db.collection('pokemon').updateMany(
     {},
     {
-    $unset: {base: '', cname: '', jname: '', skills: '', type: ''}
+    $unset: {national_id: '', __v: '', types: '', evolutions: ''}
     }
-  )
+  );
 
   // client.close();
 });

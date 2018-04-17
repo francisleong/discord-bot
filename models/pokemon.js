@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const PokemonSchema = new mongoose.Schema({
-  ename: {
+  name: {
     type: String,
     required: true,
     trim: true,
@@ -9,11 +9,23 @@ const PokemonSchema = new mongoose.Schema({
     unique: true
   },
   id: {
+    type: Number,
+    required: true,
+  },
+  image_url: {
     type: String,
     required: true,
     trim: true,
-    minLength: 3,
-    maxlength: 3
+  },
+  description: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  art_url: {
+    type: String,
+    required: true,
+    trim: true,
   }
 },
   {collection: 'pokemon'}
