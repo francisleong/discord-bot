@@ -40,21 +40,21 @@ client.on('ready', () => {
 client.on('message', async (message) => {
   if (!message.author.bot) {
     const randomInteger = generateRandomInteger(1, 251);
-    // if(randomInteger == 1) {
-    //   pokemonSpawned = true;
-    // }
+    
     if(!currentPokemon) {
-      try {
-        currentPokemon = await Pokemon.findPokemon(randomInteger);
-        console.log(currentPokemon);
-        const pokemonSpawnText = legendaryPokemonCheck(randomInteger) ? 'A legendary Pokemon appeared!' : `A wild ${scramble(currentPokemon.name)} appeared!`;
-        const pokemonSpawnDescription = legendaryPokemonCheck(randomInteger) ? 'Type their name to catch it!' : `Descramble the Pokemon\'s name to catch it!`;
-        const embed = createRichEmbed(pokemonSpawnText, currentPokemon.image_url, pokemonSpawnDescription);
-        message.channel.send({ embed });
-        pokemonSpawned = true;
-      } catch (e) {
-        message.channel.send('Was unable to connect to the Pokemon database to retrieve the Pokemon');
-      };
+      const probabilityToSpawn = generateRandomInteger(1, 20);
+      if (probabilityToSpawn == 1) {
+        try {
+          currentPokemon = await Pokemon.findPokemon(randomInteger);
+          const pokemonSpawnText = legendaryPokemonCheck(randomInteger) ? 'A legendary Pokemon appeared!' : `A wild ${scramble(currentPokemon.name)} appeared!`;
+          const pokemonSpawnDescription = legendaryPokemonCheck(randomInteger) ? 'Type their name to catch it!' : `Descramble the Pokemon\'s name to catch it!`;
+          const embed = createRichEmbed(pokemonSpawnText, currentPokemon.image_url, pokemonSpawnDescription);
+          message.channel.send({ embed });
+          pokemonSpawned = true;
+        } catch (e) {
+          message.channel.send('Was unable to connect to the Pokemon database to retrieve the Pokemon');
+        };
+      }
     } else {
       if(message.content == `${currentPokemon.name}`) {
         message.channel.send(`Added ${currentPokemon.name} to ${message.author}'s Pokedex!`);
