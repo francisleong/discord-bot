@@ -2,6 +2,8 @@ const { Command } = require('discord.js-commando');
 const { mongoose } = require('./../../db/mongoose');
 
 const { Trainer } = require('./../../models/trainer');
+const { Pokemon } = require('./../../models/pokemon');
+const createRichEmbed = require('./../../utility/createRichEmbed');
 
 class PokedexInfoCommand extends Command {
   constructor(client) {
@@ -13,7 +15,7 @@ class PokedexInfoCommand extends Command {
       examples: ['!pokedex', '!pokedex display'],
       args: [{
         key: 'display',
-        prompt: 'Do you want to display the Pokemon like a Pokedex?',
+        prompt: 'Do you want to display the Pokemon in a list format? (true/false)',
         type: 'boolean',
         default: false
       }]
@@ -35,7 +37,35 @@ class PokedexInfoCommand extends Command {
         console.log('Could not find a trainer with your ID! Please catch a Pokemon first');
       }
     } else {
-
+      console.log(pokedex);
+      let i = 1;
+      let j = 0;
+      let newFieldCounter = 0;
+      let text = '';
+      let embed = createRichEmbed(`${message.author.username}'s Pokedex`, '', '');
+      while(i < 252) {
+        if(j < pokedex.length) {
+          if (i < pokedex[j]) {
+            text = text.concat(`${i} - ???\n`);
+          } else {
+            try {
+              const {name} = await Pokemon.findPokemon(pokedex[j]);
+              text = text.concat(`${i} - ${name}\n`);
+              j++;
+            } catch(e) {
+              console.log('Unable to grab Pokemon ID', pokedex[j]);
+            }
+          }
+        }
+        i++;
+        newFieldCounter++;
+        if(newFieldCounter == 25) {
+          embed.addField(`${i - 25} - ${i}`, `${text}`, true);
+          text = '';
+          newFieldCounter = 0;
+        }
+      }
+      message.reply({ embed });
     }
   }
 }
