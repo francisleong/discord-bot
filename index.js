@@ -22,6 +22,7 @@ const client = new CommandoClient({
   disableEveryone: true
 });
 
+// Default setup for Discord Commando
 client.registry
   .registerDefaultTypes()
   .registerGroups([
@@ -40,17 +41,19 @@ client.on('ready', () => {
 
 client.on('message', async (message) => {
   if (!message.author.bot) {
-    const randomInteger = generateRandomInteger(1, 252); // Math.random function is up to, not including, 1
+    const randomInteger = generateRandomInteger(1, 251); // Math.random function is up to, not including, 1
 
+    // Spawn a Pokemon randomly if one does not exist
     if(!currentPokemon) {
       const probabilityToSpawn = generateRandomInteger(1, 1);
       if (probabilityToSpawn == 1) {
         try {
           currentPokemon = await Pokemon.findPokemon(randomInteger);
-          console.log('Spawned a', currentPokemon.name);
+          console.log(`Spawned #${randomInteger} ${currentPokemon.name}`);
           const pokemonSpawnText = legendaryPokemonCheck(randomInteger) ? 'A legendary Pokemon appeared!' : `A wild ${scramble(currentPokemon.name)} appeared!`;
           const pokemonSpawnDescription = legendaryPokemonCheck(randomInteger) ? 'Type their name to catch it!' : `Descramble the Pokemon\'s name to catch it!`;
           const embed = createRichEmbed(pokemonSpawnText, currentPokemon.image_url, pokemonSpawnDescription);
+
           message.channel.send({ embed });
           pokemonSpawned = true;
         } catch (e) {
@@ -58,17 +61,22 @@ client.on('message', async (message) => {
           console.log('Was unable to connect to the Pokemon database to retrieve the Pokemon');
         };
       }
-    } else {
+    }
+    // Pokemon exists. Time to capture it!
+    else {
       if (message.content == `${currentPokemon.name}`) {
         try {
           const trainer = await Trainer.findOne({discordId: message.author.id});
+          // Creates trainer if one does not exist in the database
           if (!trainer) {
             const newTrainer = new Trainer({ discordId: message.author.id })
             await newTrainer.save();
             message.author.send('Welcome to Francis\'s Pokemon Bot! A trainer has been created with your Discord ID.');
             console.log('Created new trainer', message.author.id);
           }
+          // Updates trainer database with the newly caught Pokemon
           await Trainer.updatePokedex(message.author.id, currentPokemon.id);
+          console.log(`Successfully added #${currentPokemon.id} to ${message.author.id}`);
         } catch (e) {
           console.log('Was unable to connect to the Trainer database to retrieve/create trainer', e);
         }

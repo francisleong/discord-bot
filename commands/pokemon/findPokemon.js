@@ -18,12 +18,12 @@ class FindPokemonCommand extends Command {
       ]
     });
   };
-  async run(msg, { pokemonID }) {
+  async run(message, { pokemonID }) {
     try {
       const pokemon = await Pokemon.findPokemon(pokemonID);
-      msg.reply(`a Pokedex ID of ${pokemonID} corresponds to ${pokemon.name}!`);
+      message.reply(`a Pokedex ID of ${pokemonID} corresponds to ${pokemon.name}!`);
     } catch(e) {
-      msg.reply(`Could not find any Pokemon in the Pokedex with an ID of ${pokemonID}`);
+      message.reply(`Could not find any Pokemon in the Pokedex with an ID of ${pokemonID}`);
     };
   }
 };

@@ -16,15 +16,38 @@ const TrainerSchema = new mongoose.Schema({
   }
 });
 
-TrainerSchema.statics.updatePokedex = function (discordId, pokemonId) {
+TrainerSchema.statics.updatePokedex = async function (discordId, pokemonId) {
   const Trainer = this;
-  return Trainer.findOneAndUpdate(
-    { discordId },
-    {
-      $inc: { totalCaught: 1 },
-      $addToSet: { pokedex: pokemonId }
-    });
+  try {
+    const trainer = await Trainer.getPokedex(discordId);
+    if (trainer.pokedex.includes(pokemonId)) {
+      return Trainer.findOneAndUpdate(
+        { discordId },
+        { $inc: { totalCaught: 1 } }
+      )
+    } else {
+      return Trainer.findOneAndUpdate(
+        { discordId },
+        {
+          $inc: { totalCaught: 1 },
+          $push: {
+            pokedex: {
+              $each: [pokemonId],
+              $sort: 1
+            }
+          }
+        }
+      );
+    }
+  } catch(e) {
+    console.log('Error updating the Pokedex', (e));
+  };
 };
+
+TrainerSchema.statics.getPokedex = function (discordId) {
+  const Trainer = this;
+  return Trainer.findOne({discordId}, {pokedex: true});
+}
 
 const Trainer = mongoose.model('Trainer', TrainerSchema);
 module.exports = { Trainer };
