@@ -59,10 +59,17 @@ client.on('message', async (message) => {
 
     // Spawn a Pokemon randomly if one does not exist
     if(!currentPokemon) {
-      const probabilityToSpawn = generateRandomInteger(1, 7);
+      const probabilityToSpawn = generateRandomInteger(1, 8);
       if (probabilityToSpawn == 1) {
         try {
+          if (legendaryPokemonCheck(randomInteger)) {
+            if (generateRandomInteger(1, 4) != 1) {
+              message.channel.send('You saw a shiny sparkle and thought it was a legendary, but your eyes were just playing tricks.');
+              return;
+            }
+          }
           currentPokemon = await Pokemon.findPokemon(randomInteger);
+          
           console.log(`Spawned #${randomInteger} ${currentPokemon.name}`);
           const pokemonSpawnText = legendaryPokemonCheck(randomInteger) ? 'A legendary Pokemon appeared!' : `A wild ${scramble(currentPokemon.name)} appeared!`;
           const pokemonSpawnDescription = legendaryPokemonCheck(randomInteger) ? 'Type their name to catch it!' : `Descramble the Pokemon\'s name to catch it!`;
