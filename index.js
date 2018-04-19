@@ -1,5 +1,5 @@
 console.log(process.env.NODE_ENV);
-require('./config/config');
+require('./config/config.js');
 
 const { CommandoClient } = require('discord.js-commando');
 const Discord = require('discord.js');
