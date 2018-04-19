@@ -45,7 +45,7 @@ client.on('message', async (message) => {
 
     // Spawn a Pokemon randomly if one does not exist
     if(!currentPokemon) {
-      const probabilityToSpawn = generateRandomInteger(1, 20);
+      const probabilityToSpawn = generateRandomInteger(1, 10);
       if (probabilityToSpawn == 1) {
         try {
           currentPokemon = await Pokemon.findPokemon(randomInteger);
