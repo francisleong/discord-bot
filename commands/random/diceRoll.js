@@ -27,6 +27,12 @@ class DiceRollCommand extends Command {
   run(message, { timesToRoll, showEachRoll }) {
     let i = 0;
     let count = new Array(6).fill(0);
+
+    if (timesToRoll > 100000) {
+      message.reply('seriously. You don\'t need to roll that much. Choose a smaller number');
+      return;
+    }
+
     if (timesToRoll > 4 && showEachRoll == true) {
       message.reply(`You've specified to show each roll and to roll ${timesToRoll} times. For performance sakes, we will not be showing each indivudal roll.`);
       showEachRoll = false;
