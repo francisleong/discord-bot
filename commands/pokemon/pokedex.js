@@ -14,17 +14,17 @@ class PokedexInfoCommand extends Command {
       description: 'Returns or displays (option) the number of caught Pokemon and ones missing',
       examples: ['!pokedex', '!pokedex display'],
       args: [{
-        key: 'display',
-        prompt: 'Do you want to display the Pokemon in a list format? (true/false)',
-        type: 'boolean',
-        default: false
+        key: 'list',
+        prompt: 'Type list to display your Pokedex in a list format',
+        type: 'string',
+        default: ''
       }]
     })
   }
 
-  async run(message, {display}) {
+  async run(message, {list}) {
     const { pokedex } = await Trainer.getPokedex(message.author.id);
-    if (!display) {
+    if (!list) {
       try {
         const remaining = 251 - pokedex.length;
         let text = 'You\'ve got quite a way to go to become a Pokemon Master!';
@@ -37,7 +37,6 @@ class PokedexInfoCommand extends Command {
         console.log('Could not find a trainer with your ID! Please catch a Pokemon first');
       }
     } else {
-      console.log(pokedex);
       let i = 1;
       let j = 0;
       let newFieldCounter = 0;
@@ -56,11 +55,13 @@ class PokedexInfoCommand extends Command {
               console.log('Unable to grab Pokemon ID', pokedex[j]);
             }
           }
+        } else {
+          text = text.concat(`${i} - ???\n`);
         }
         i++;
         newFieldCounter++;
-        if(newFieldCounter == 25) {
-          embed.addField(`${i - 25} - ${i}`, `${text}`, true);
+        if(newFieldCounter == Math.ceil(251/3) || i == 252) {
+          embed.addField(`${i - 84} - ${i - 1}`, `${text}`, true);
           text = '';
           newFieldCounter = 0;
         }
