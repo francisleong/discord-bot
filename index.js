@@ -1,4 +1,3 @@
-console.log(process.env.NODE_ENV);
 require('./config/config.js');
 
 const { CommandoClient } = require('discord.js-commando');
@@ -46,7 +45,7 @@ client.on('message', async (message) => {
 
     // Spawn a Pokemon randomly if one does not exist
     if(!currentPokemon) {
-      const probabilityToSpawn = generateRandomInteger(1, 1);
+      const probabilityToSpawn = generateRandomInteger(1, 20);
       if (probabilityToSpawn == 1) {
         try {
           currentPokemon = await Pokemon.findPokemon(randomInteger);
