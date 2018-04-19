@@ -1,3 +1,4 @@
+console.log(process.env.NODE_ENV);
 require('./config/config');
 
 const { CommandoClient } = require('discord.js-commando');
