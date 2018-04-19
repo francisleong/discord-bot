@@ -16,6 +16,20 @@ let pokemonSpawned = false;
 
 function scramble(a) { a = a.split(""); for (var b = a.length - 1; 0 < b; b--) { var c = Math.floor(Math.random() * (b + 1)); d = a[b]; a[b] = a[c]; a[c] = d } return a.join("") };
 
+// Solely to run on Heroku or else it crashes since there is no port to listen to
+var express = require('express');
+var app = express();
+
+app.set('port', (process.env.PORT || 5000));
+
+//For avoidong Heroku $PORT error
+app.get('/', function (request, response) {
+  var result = 'App is running'
+  response.send(result);
+}).listen(app.get('port'), function () {
+  console.log('App is running, server is listening on port ', app.get('port'));
+});
+////////////////////////////////////////////////////////////////////////////////
 const client = new CommandoClient({
   commandPrefix: '!',
   owner: '434122537081896961',
